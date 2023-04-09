@@ -174,6 +174,11 @@ local speedyRush = EntityCreator.createEntity({
     },
 })
 
+local function spawnScreech()
+    local screechAttack = require(game.StarterGui.MainUI.Initiator.Main_Game.RemoteListener.Modules.Screech)
+    screechAttack(require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game), workspace.CurrentRooms[game.Players.LocalPlayer:GetAttribute("CurrentRoom")])
+end
+
 local soundCache = {}
 local function playLocalSound(soundId, vol)
     local sound = nil
@@ -192,11 +197,9 @@ end
 
 Events["SCREECH10"] = {
     onStart = function ()
-        local screechAttack = require(game.StarterGui.MainUI.Initiator.Main_Game.RemoteListener.Modules.Screech)
-    
         for i = 1, 10 do
             task.spawn(function()
-                screechAttack(require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game), workspace.CurrentRooms[game.Players.LocalPlayer:GetAttribute("CurrentRoom")])
+                spawnScreech()
             end)
         end
     end,
@@ -265,7 +268,7 @@ Events["10FPSCAP"] = {
     onEnd = function ()
         getgenv().fpsCapEvent = false
     end,
-    Duration = 25,
+    Duration = 3, --Timer goes a lot slower with the lag
     Name = "Mobile Experience (Lag)"
 }
 
@@ -273,7 +276,7 @@ Events["10FPSCAP"] = {
 Events["MoreWalkspeed"] = {
     onStart = function ()
         local c = RunService.RenderStepped:Connect(function()
-            localPlayer.Character.Humanoid.WalkSpeed = 175
+            localPlayer.Character.Humanoid.WalkSpeed = 75
         end)
 
         return c
@@ -286,5 +289,13 @@ Events["MoreWalkspeed"] = {
     Name = "VROOOOOOOOOOOOOOOOOOOM"
 }
 
+Events["ScreechCombo"] = {
+    onStart = function ()
+        task.spawn(spawnA90)
+        task.spawn(spawnScreech)
+    end,
+
+    Name = "A-90 + Screech"
+}
 
 return Events
