@@ -268,7 +268,7 @@ Events["10FPSCAP"] = {
     onEnd = function ()
         getgenv().fpsCapEvent = false
     end,
-    Duration = 3, --Timer goes a lot slower with the lag
+    Duration = .1, --Timer goes a lot slower with the lag
     Name = "Mobile Experience (Lag)"
 }
 
