@@ -251,4 +251,4 @@ Events["SpeedRush"] ={
     Name = "Rush (4x Speed)"
 }
 
-
+return Events
