@@ -124,10 +124,10 @@ local function spawnA90()
 end
 
 local speedyRush = EntityCreator.createEntity({
-    CustomName = "Rush (3x Speed)", -- Custom name of your entity
+    CustomName = "Rush (2x Speed)", -- Custom name of your entity
     Model = "https://github.com/RegularVynixu/Utilities/blob/main/Doors%20Entity%20Spawner/Models/Rush.rbxm?raw=true", -- Can be GitHub file or rbxassetid
-    Speed = 300, -- Percentage, 100 = default Rush speed
-    DelayTime = 2, -- Time before starting cycles (seconds)
+    Speed = 200, -- Percentage, 100 = default Rush speed
+    DelayTime = 4, -- Time before starting cycles (seconds)
     HeightOffset = 0,
     CanKill = true,
     KillRange = 50,
@@ -251,7 +251,7 @@ Events["SpeedRush"] ={
     onStart = function ()
         EntityCreator.runEntity(speedyRush)
     end,
-    Name = "Rush (3x Speed)"
+    Name = "Rush (2x Speed)"
 }
 
 
@@ -270,7 +270,7 @@ Events["10FPSCAP"] = {
     onEnd = function ()
         getgenv().fpsCapEvent = false
     end,
-    Duration = 15, --Timer goes a lot slower with the lag
+    Duration = 20, --Timer goes a lot slower with the lag
     Name = "Mobile Experience (Lag)"
 }
 
