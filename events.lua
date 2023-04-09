@@ -254,6 +254,7 @@ Events["SpeedRush"] ={
 
 Events["15FPSCAP"] = {
     onStart = function ()
+        local MaxFPS = 15
         getgenv().fpsCapEvent = true
         while getgenv().fpsCapEvent do
             local Tick1 = tick()
