@@ -257,18 +257,20 @@ Events["SpeedRush"] ={
 
 Events["10FPSCAP"] = {
     onStart = function ()
-        local MaxFPS = 10
-        getgenv().fpsCapEvent = true
-        while getgenv().fpsCapEvent do
-            local Tick1 = tick()
-            RunService.Heartbeat:Wait()
-            repeat until (Tick1 + 1/MaxFPS) < tick()
-        end
+        task.spawn(function ()
+            local MaxFPS = 10
+            getgenv().fpsCapEvent = true
+            while getgenv().fpsCapEvent do
+                local Tick1 = tick()
+                RunService.Heartbeat:Wait()
+                repeat until (Tick1 + 1/MaxFPS) < tick()
+            end
+        end)
     end,
     onEnd = function ()
         getgenv().fpsCapEvent = false
     end,
-    Duration = .1, --Timer goes a lot slower with the lag
+    Duration = 15, --Timer goes a lot slower with the lag
     Name = "Mobile Experience (Lag)"
 }
 
