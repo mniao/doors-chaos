@@ -124,7 +124,7 @@ local function spawnA90()
 end
 
 local speedyRush = EntityCreator.createEntity({
-    CustomName = "Template Entity", -- Custom name of your entity
+    CustomName = "Rush (4x Speed)", -- Custom name of your entity
     Model = "https://github.com/RegularVynixu/Utilities/blob/main/Doors%20Entity%20Spawner/Models/Rush.rbxm?raw=true", -- Can be GitHub file or rbxassetid
     Speed = 400, -- Percentage, 100 = default Rush speed
     DelayTime = 2, -- Time before starting cycles (seconds)
@@ -139,7 +139,7 @@ local speedyRush = EntityCreator.createEntity({
     },
     Cycles = {
         Min = 1,
-        Max = 4,
+        Max = 1,
         WaitTime = 2,
     },
     CamShake = {
@@ -209,7 +209,7 @@ Events["Meowscare"] = {
         local newGui = Instance.new("ScreenGui")
         local frame = Instance.new("ImageLabel")
     
-        frame.Image = "rbxassetid://13049267951"
+        frame.Image = "rbxassetid://13049267922"
         frame.Size = UDim2.new(0, 500, 0, 500)
         frame.BackgroundTransparency = 1
         frame.Position = UDim2.fromScale(.5,.5)
