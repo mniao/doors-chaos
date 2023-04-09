@@ -124,9 +124,9 @@ local function spawnA90()
 end
 
 local speedyRush = EntityCreator.createEntity({
-    CustomName = "Rush (4x Speed)", -- Custom name of your entity
+    CustomName = "Rush (3x Speed)", -- Custom name of your entity
     Model = "https://github.com/RegularVynixu/Utilities/blob/main/Doors%20Entity%20Spawner/Models/Rush.rbxm?raw=true", -- Can be GitHub file or rbxassetid
-    Speed = 400, -- Percentage, 100 = default Rush speed
+    Speed = 300, -- Percentage, 100 = default Rush speed
     DelayTime = 2, -- Time before starting cycles (seconds)
     HeightOffset = 0,
     CanKill = true,
@@ -248,7 +248,42 @@ Events["SpeedRush"] ={
     onStart = function ()
         EntityCreator.runEntity(speedyRush)
     end,
-    Name = "Rush (4x Speed)"
+    Name = "Rush (3x Speed)"
 }
+
+
+Events["15FPSCAP"] = {
+    onStart = function ()
+        getgenv().fpsCapEvent = true
+        while getgenv().fpsCapEvent do
+            local Tick1 = tick()
+            RunService.Heartbeat:Wait()
+            repeat until (Tick1 + 1/MaxFPS) < tick()
+        end
+    end,
+    onEnd = function ()
+        getgenv().fpsCapEvent = false
+    end,
+    Duration = 25,
+    Name = "Mobile Experience (Lag)"
+}
+
+
+Events["MoreWalkspeed"] = {
+    onStart = function ()
+        local c = RunService.RenderStepped:Connect(function()
+            localPlayer.Character.Humanoid.WalkSpeed = 175
+        end)
+
+        return c
+    end,
+    onEnd = function (c)
+        c:Disconnect()
+        localPlayer.Character.Humanoid.WalkSpeed = 15
+    end,
+    Duration = 15,
+    Name = "VROOOOOOOOOOOOOOOOOOOM"
+}
+
 
 return Events
