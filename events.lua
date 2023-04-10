@@ -285,7 +285,7 @@ Events["Meowscare"] = {
         local frame = Instance.new("ImageLabel")
     
         frame.Image = "rbxassetid://13049267922"
-        frame.Size = UDim2.new(0, 500, 0, 500)
+        frame.Size = UDim2.new(0, 550, 0, 550)
         frame.BackgroundTransparency = 1
         frame.Position = UDim2.fromScale(.5,.5)
         frame.AnchorPoint = Vector2.new(.5,.5)
@@ -298,8 +298,8 @@ Events["Meowscare"] = {
 
         frame.Visible = true
     
-        playLocalSound("rbxassetid://5058160717", 3)
-        playLocalSound("rbxassetid://1091083826", 4)
+        playLocalSound("rbxassetid://5058160717", 4)
+        playLocalSound("rbxassetid://1091083826", 5)
     
         task.wait(1.5)
     
@@ -324,6 +324,7 @@ Events["SpeedRush"] ={
     onStart = function ()
         EntityCreator.runEntity(speedyRush)
     end,
+    Duration = 20,
     Name = "Rush (2x Speed)"
 }
 
@@ -343,7 +344,7 @@ Events["10FPSCAP"] = {
     onEnd = function ()
         getgenv().fpsCapEvent = false
     end,
-    Duration = 20, --Timer goes a lot slower with the lag
+    Duration = 20,
     Name = "Mobile Experience (Lag)"
 }
 
@@ -370,7 +371,6 @@ Events["ScreechCombo"] = {
         task.wait(1)
         task.spawn(spawnA90, true)
     end,
-
     Name = "A-90 + Screech"
 }
 
@@ -398,7 +398,9 @@ Events["Glitch"] = {
 Events["Rizzler"] = {
     onStart = function ()
         EntityCreator.runEntity(rizzler)
-    end
+    end,
+    Duration = 20,
+    Name = "RIZZLER"
 }
 
 Events["Blur"] = {
