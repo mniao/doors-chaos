@@ -3,10 +3,16 @@ local Debris = game:GetService("Debris")
 local RunService = game:GetService("RunService")
 local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
+local Lighting = game:GetService("Lighting")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local EntityCreator = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors%20Entity%20Spawner/Source.lua"))()
 
 local localPlayer = Players.LocalPlayer
+local playerScripts = localPlayer:WaitForChild("PlayerScripts")
+local playerModule = require(playerScripts:WaitForChild("PlayerModule"))
+
+local movementController = playerModule:GetControls()
 
 local Events = {}
 
@@ -123,6 +129,7 @@ local function spawnA90()
     return u3
 end
 
+
 local speedyRush = EntityCreator.createEntity({
     CustomName = "Rush (2x Speed)", -- Custom name of your entity
     Model = "https://github.com/RegularVynixu/Utilities/blob/main/Doors%20Entity%20Spawner/Models/Rush.rbxm?raw=true", -- Can be GitHub file or rbxassetid
@@ -174,6 +181,57 @@ local speedyRush = EntityCreator.createEntity({
     },
 })
 
+local rizzler = EntityCreator.createEntity({
+    CustomName = "The Rizzler", -- Custom name of your entity
+    Model = "https://github.com/mniao/doors-chaos/blob/main/rizzler.rbxm?raw=true", -- Can be GitHub file or rbxassetid
+    Speed = 150,
+    DelayTime = 4, -- Time before starting cycles (seconds)
+    HeightOffset = 0,
+    CanKill = true,
+    KillRange = 50,
+    BackwardsMovement = true,
+    BreakLights = false,
+    FlickerLights = {
+        true, -- Enabled/Disabled
+        4, -- Time (seconds)
+    },
+    Cycles = {
+        Min = 2,
+        Max = 2,
+        WaitTime = 3,
+    },
+    CamShake = {
+        true, -- Enabled/Disabled
+        {10, 20, 0.1, 1}, -- Shake values (don't change if you don't know)
+        100, -- Shake start distance (from Entity to you)
+    },
+    Jumpscare = {
+        true, -- Enabled/Disabled
+        {
+            Image1 = "rbxassetid://12623079242", -- Image1 url
+            Image2 = "rbxassetid://12623079242", -- Image2 url
+            Shake = true,
+            Sound1 = {
+                5058160717, -- SoundId
+                { Volume = 0.5 }, -- Sound properties
+            },
+            Sound2 = {
+                4809574295, -- SoundId
+                { Volume = 0.5 }, -- Sound properties
+            },
+            Flashing = {
+                true, -- Enabled/Disabled
+                Color3.fromRGB(255, 255, 255), -- Color
+            },
+            Tease = {
+                false, -- Enabled/Disabled
+                Min = 1,
+                Max = 3,
+            },
+        },
+    },
+})
+
 local function spawnScreech()
     local screechAttack = require(game.StarterGui.MainUI.Initiator.Main_Game.RemoteListener.Modules.Screech)
     screechAttack(require(game.Players.LocalPlayer.PlayerGui.MainUI.Initiator.Main_Game), workspace.CurrentRooms[game.Players.LocalPlayer:GetAttribute("CurrentRoom")])
@@ -195,15 +253,23 @@ local function playLocalSound(soundId, vol)
     SoundService:PlayLocalSound(sound)
 end
 
-Events["SCREECH10"] = {
+Events["ScreechHell"] = {
     onStart = function ()
-        for i = 1, 10 do
-            task.spawn(function()
-                spawnScreech()
-            end)
+        getgenv().screechHellEvent = true
+        while getgenv().screechHellEvent do
+            for i = 1, 5 do
+                task.spawn(function()
+                    spawnScreech()
+                end)
+            end
+            task.wait(1)
         end
     end,
-    Name = "Screech x10"
+    onEnd = function ()
+        getgenv().screechHellEvent = false
+    end,
+    Duration = 15,
+    Name = "Screech Hell"
 }
 
 
@@ -217,12 +283,17 @@ Events["Meowscare"] = {
         frame.BackgroundTransparency = 1
         frame.Position = UDim2.fromScale(.5,.5)
         frame.AnchorPoint = Vector2.new(.5,.5)
+        frame.Visible = false
         frame.Parent = newGui
     
         newGui.Parent = localPlayer.PlayerGui
+
+        task.wait(2)
+
+        frame.Visible = true
     
-        playLocalSound("rbxassetid://5058160717", 2)
-        playLocalSound("rbxassetid://1091083826", 3)
+        playLocalSound("rbxassetid://5058160717", 3)
+        playLocalSound("rbxassetid://1091083826", 4)
     
         task.wait(1.5)
     
@@ -278,7 +349,7 @@ Events["10FPSCAP"] = {
 Events["MoreWalkspeed"] = {
     onStart = function ()
         local c = RunService.RenderStepped:Connect(function()
-            localPlayer.Character.Humanoid.WalkSpeed = 75
+            localPlayer.Character.Humanoid.WalkSpeed = 23
         end)
 
         return c
@@ -288,16 +359,65 @@ Events["MoreWalkspeed"] = {
         localPlayer.Character.Humanoid.WalkSpeed = 15
     end,
     Duration = 15,
-    Name = "VROOOOOOOOOOOOOOOOOOOM"
+    Name = "VROOOOOMMM"
 }
 
 Events["ScreechCombo"] = {
     onStart = function ()
-        task.spawn(spawnA90)
         task.spawn(spawnScreech)
+        task.wait(1)
+        task.spawn(spawnA90)
     end,
 
     Name = "A-90 + Screech"
 }
+
+Events["InvertControls"] = {
+    onStart = function ()
+        movementController.moveFunction = function (player, direction, relative)
+            localPlayer.Move(player, -direction, relative)
+        end
+    end,
+    onEnd = function ()
+        movementController.moveFunction = localPlayer.Move
+    end,
+    Duration = 20,
+    Name = "Inverted Controls"
+}
+
+Events["Glitch"] = {
+    onStart = function ()
+        require(ReplicatedStorage.ClientModules.EntityModules.Glitch).stuff(require(localPlayer.PlayerGui.MainUI.Initiator.Main_Game),
+        workspace.CurrentRooms[game.Players.LocalPlayer:GetAttribute("CurrentRoom")])
+    end,
+    Name = "Spawn Glitch"
+}
+
+Events["Rizzler"] = {
+    onStart = function ()
+        EntityCreator.runEntity(rizzler)
+    end
+}
+
+Events["Blur"] = {
+    onStart = function ()
+        local blur = Instance.new("BlurEffect")
+        local oldBlurSize = blur.Size
+        blur.Size = 0
+        blur.Parent = Lighting
+        
+        TweenService:Create(blur, TweenInfo.new(1.5, Enum.EasingStyle.Quint), {Size = oldBlurSize}):Play()
+
+        return blur
+    end,
+    onEnd = function (blur)
+        if blur then
+            blur:Destroy()
+        end
+    end,
+    Duration = 25,
+    Name = "Where are my glasses?"
+}
+
 
 return Events
