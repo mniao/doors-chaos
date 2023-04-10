@@ -193,7 +193,7 @@ local rizzler = EntityCreator.createEntity({
     HeightOffset = 0,
     CanKill = true,
     KillRange = 50,
-    BackwardsMovement = true,
+    BackwardsMovement = false,
     BreakLights = false,
     FlickerLights = {
         true, -- Enabled/Disabled
@@ -206,7 +206,7 @@ local rizzler = EntityCreator.createEntity({
     },
     CamShake = {
         true, -- Enabled/Disabled
-        {10, 20, 0.1, 1}, -- Shake values (don't change if you don't know)
+        {7, 20, 0.1, 1}, -- Shake values (don't change if you don't know)
         100, -- Shake start distance (from Entity to you)
     },
     Jumpscare = {
