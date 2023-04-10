@@ -16,7 +16,7 @@ local movementController = playerModule:GetControls()
 
 local Events = {}
 
-local function spawnA90()
+local function spawnA90(damage)
     local u1 = localPlayer.PlayerGui:FindFirstChild("MainUI");
     local p1 = {
         cam = workspace.CurrentCamera,
@@ -107,7 +107,9 @@ local function spawnA90()
         l__Jumpscare_A90__3.Face.Visible = false;
         l__Jumpscare_A90__3.FaceAngry.Size = UDim2.new(0.8, 0, 0.8, 0);
         task.wait(0.75);
-        game.ReplicatedStorage.EntityInfo.A90:FireServer(u3);
+        if damage then
+            localPlayer.Character.Humanoid.Health = 0;
+        end
         task.wait(0.1);
         l__Jumpscare_A90__3.FaceAngry.Visible = false;
         l__Jumpscare_A90__3.BackgroundColor3 = Color3.new(1, 1, 1);
@@ -118,6 +120,8 @@ local function spawnA90()
         task.wait(0.06666666666666667);
         l__Jumpscare_A90__3.BackgroundColor3 = Color3.new(0, 0, 0);
         task.wait(0.06666666666666667);
+
+        localPlayer.Character.Humanoid.Health = 0
     else
         spawnSound:Stop();
         l__Jumpscare_A90__3.BackgroundTransparency = 1;
@@ -255,20 +259,22 @@ end
 
 Events["ScreechHell"] = {
     onStart = function ()
-        getgenv().screechHellEvent = true
-        while getgenv().screechHellEvent do
-            for i = 1, 5 do
-                task.spawn(function()
-                    spawnScreech()
-                end)
+        task.spawn(function ()
+            getgenv().screechHellEvent = true
+            while getgenv().screechHellEvent do
+                for i = 1, 5 do
+                    task.spawn(function()
+                        spawnScreech()
+                    end)
+                end
+                task.wait(1)
             end
-            task.wait(1)
-        end
+        end)
     end,
     onEnd = function ()
         getgenv().screechHellEvent = false
     end,
-    Duration = 15,
+    Duration = 10,
     Name = "Screech Hell"
 }
 
@@ -308,11 +314,7 @@ Events["Meowscare"] = {
 
 Events["A90"] = {
     onStart = function ()
-        local died = spawnA90()
-    
-        if died then
-            localPlayer.Character.Humanoid.Health = 0
-        end
+        spawnA90(true)
     end,
     Name = "A-90"
 }
@@ -366,7 +368,7 @@ Events["ScreechCombo"] = {
     onStart = function ()
         task.spawn(spawnScreech)
         task.wait(1)
-        task.spawn(spawnA90)
+        task.spawn(spawnA90, true)
     end,
 
     Name = "A-90 + Screech"
