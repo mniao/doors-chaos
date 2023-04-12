@@ -440,7 +440,7 @@ Events["Flashbang"] = {
         local whiteTweenIn = TweenService:Create(frame, TweenInfo.new(.5, Enum.EasingStyle.Quint), {BackgroundTransparency=0})
         local whiteTweenOut = TweenService:Create(frame, TweenInfo.new(5, Enum.EasingStyle.Sine), {BackgroundTransparency=1})
         local blurOut = TweenService:Create(blur, TweenInfo.new(10, Enum.EasingStyle.Sine), {Size=0})
-        local audioBack = TweenService:Create(SoundService.Main, TweenInfo.new(8, Enum.EasingStyle.Sine, Enum.EasingDirection.In), {Volume=1})
+        local audioBack = TweenService:Create(SoundService.Main, TweenInfo.new(8, Enum.EasingStyle.Linear), {Volume=1})
 
         Debris:AddItem(blur, 15)
         Debris:AddItem(flashUI, 15)
