@@ -352,7 +352,7 @@ Events["10FPSCAP"] = {
 Events["MoreWalkspeed"] = {
     onStart = function ()
         local c = RunService.RenderStepped:Connect(function()
-            localPlayer.Character.Humanoid.WalkSpeed = 23
+            localPlayer.Character.Humanoid.WalkSpeed = 20
         end)
 
         return c
@@ -395,22 +395,14 @@ Events["Glitch"] = {
     Name = "Spawn Glitch"
 }
 
-Events["Rizzler"] = {
-    onStart = function ()
-        EntityCreator.runEntity(rizzler)
-    end,
-    Duration = 20,
-    Name = "RIZZLER"
-}
-
 Events["Blur"] = {
     onStart = function ()
         local blur = Instance.new("BlurEffect")
-        local oldBlurSize = blur.Size
+        local targetBlurSize = 50
         blur.Size = 0
         blur.Parent = Lighting
         
-        TweenService:Create(blur, TweenInfo.new(1.5, Enum.EasingStyle.Quint), {Size = oldBlurSize}):Play()
+        TweenService:Create(blur, TweenInfo.new(1.5, Enum.EasingStyle.Quint), {Size = targetBlurSize}):Play()
 
         return blur
     end,
@@ -423,5 +415,86 @@ Events["Blur"] = {
     Name = "Where are my glasses?"
 }
 
+Events["Flashbang"] = {
+    onStart = function()
+        SoundService.Main.Volume = 0
+        local flashUI = Instance.new("ScreenGui")
+        local explosionSound = Instance.new("Sound")
+        explosionSound.Volume = 3
+        local blur = Instance.new("BlurEffect")
+        blur.Size = 50
+        explosionSound.SoundId = "rbxassetid://5801257793"
+
+        flashUI.IgnoreGuiInset = true
+
+        local frame = Instance.new("Frame")
+        frame.BackgroundColor3 = Color3.new(1,1,1)
+        frame.AnchorPoint = Vector2.new(0.5,0.5)
+        frame.Size = UDim2.fromScale(1,1)
+        frame.Position = UDim2.fromScale(.5, .5)
+        frame.BackgroundTransparency = 1
+        frame.Parent = flashUI
+
+        flashUI.Parent = localPlayer.PlayerGui
+
+        local whiteTweenIn = TweenService:Create(frame, TweenInfo.new(.5, Enum.EasingStyle.Quint), {BackgroundTransparency=0})
+        local whiteTweenOut = TweenService:Create(frame, TweenInfo.new(5, Enum.EasingStyle.Sine), {BackgroundTransparency=1})
+        local blurOut = TweenService:Create(blur, TweenInfo.new(10, Enum.EasingStyle.Sine), {Size=0})
+        local audioBack = TweenService:Create(SoundService.Main, TweenInfo.new(8, Enum.EasingStyle.Sine, Enum.EasingDirection.In), {Volume=1})
+
+        Debris:AddItem(blur, 15)
+        Debris:AddItem(flashUI, 15)
+
+        SoundService:PlayLocalSound(explosionSound)
+        task.spawn(function()
+            blur.Parent = Lighting
+            whiteTweenIn:Play()
+            task.wait(2)
+            whiteTweenOut:Play()
+            audioBack:Play()
+            blurOut:Play()
+        end)
+    end,
+    Name = "FLASHBANG!",
+    Duration = 2
+}
+
+Events["Moving"] = {
+    onStart = function ()
+        getgenv().autoRunningConnection = RunService.RenderStepped:Connect(function(dt)
+            localPlayer.Character.Humanoid:Move(Vector3.new(0,0,-1), true)
+        end)
+    end,
+    onEnd = function ()
+        getgenv().autoRunningConnection:Disconnect()
+    end,
+    Name = "Stuck W key",
+    Duration = 20
+}
+
+Events["FlipCamera"] = {
+    onStart = function ()
+        getgenv().flipCameraUpdateConnection = RunService.RenderStepped:Connect(function()
+            workspace.CurrentCamera.CFrame = workspace.CurrentCamera.CFrame * CFrame.Angles(0,0,math.rad(180))
+        end)
+    end,
+    onEnd = function ()
+        if getgenv().flipCameraUpdateConnection then
+            getgenv().flipCameraUpdateConnection:Disconnect()
+        end
+    end,
+    Name = "Flipped Camera",
+    Duration = 20
+}
+
+--[[
+    Events["Rizzler"] = {
+    onStart = function ()
+        EntityCreator.runEntity(rizzler)
+    end,
+    Duration = 20,
+    Name = "RIZZLER"
+}
+]]
 
 return Events
