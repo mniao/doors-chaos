@@ -365,15 +365,6 @@ Events["MoreWalkspeed"] = {
     Name = "VROOOOOMMM"
 }
 
-Events["ScreechCombo"] = {
-    onStart = function ()
-        task.spawn(spawnScreech)
-        task.wait(1)
-        task.spawn(spawnA90, true)
-    end,
-    Name = "A-90 + Screech"
-}
-
 Events["InvertControls"] = {
     onStart = function ()
         movementController.moveFunction = function (player, direction, relative)
@@ -462,13 +453,13 @@ Events["Flashbang"] = {
 Events["Moving"] = {
     onStart = function ()
         getgenv().autoRunningConnection = RunService.RenderStepped:Connect(function(dt)
-            localPlayer.Character.Humanoid:Move(Vector3.new(0,0,-1), true)
+            localPlayer.Character.Humanoid:Move(Vector3.new(0,0,1), true)
         end)
     end,
     onEnd = function ()
         getgenv().autoRunningConnection:Disconnect()
     end,
-    Name = "Stuck W key",
+    Name = "Moonwalk",
     Duration = 20
 }
 
@@ -486,6 +477,32 @@ Events["FlipCamera"] = {
     Name = "Flipped Camera",
     Duration = 20
 }
+
+Events["SpinCamera"] = {
+    onStart = function ()
+        getgenv().spinCameraUpdateConnection = RunService.RenderStepped:Connect(function()
+            workspace.CurrentCamera.CFrame = workspace.CurrentCamera.CFrame * CFrame.Angles(0,0,math.rad(os.clock() * 2))
+        end)
+    end,
+    onEnd = function ()
+        if getgenv().spinCameraUpdateConnection then
+            getgenv().spinCameraUpdateConnection:Disconnect()
+        end
+    end,
+    Name = "Spin Camera",
+    Duration = 20
+}
+
+--[[
+    Events["ScreechCombo"] = {
+    onStart = function ()
+        task.spawn(spawnScreech)
+        task.wait(1)
+        task.spawn(spawnA90, true)
+    end,
+    Name = "A-90 + Screech"
+}
+]]
 
 --[[
     Events["Rizzler"] = {
