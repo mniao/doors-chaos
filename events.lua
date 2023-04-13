@@ -481,7 +481,7 @@ Events["FlipCamera"] = {
 Events["SpinCamera"] = {
     onStart = function ()
         getgenv().spinCameraUpdateConnection = RunService.RenderStepped:Connect(function()
-            workspace.CurrentCamera.CFrame = workspace.CurrentCamera.CFrame * CFrame.Angles(0,0,math.rad(os.clock() * 2))
+            workspace.CurrentCamera.CFrame = workspace.CurrentCamera.CFrame * CFrame.Angles(0,0,math.rad(os.clock() * 60))
         end)
     end,
     onEnd = function ()
